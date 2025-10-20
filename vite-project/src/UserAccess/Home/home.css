@@ -1,0 +1,11 @@
+@import url();
+
+.content-user{
+    max-width: 100%;
+    background-color: var(--second-background-color);
+}
+
+.wrapper-menu{
+    
+    height: 85px;
+}

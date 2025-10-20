@@ -1,0 +1,20 @@
+body{
+    display: flex;
+    flex-direction: column;
+    max-width: 100%;
+}
+#root{
+    
+    display: flex;
+    justify-content: center;
+}
+@media screen and (min-width:809px){
+    body{
+        align-content: center;
+        justify-items: center;
+        align-items: center;
+        height: 100%;
+        background-color: var(--second-background-color) ;
+        
+    }
+}

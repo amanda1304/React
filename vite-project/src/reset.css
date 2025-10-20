@@ -1,0 +1,25 @@
+input{
+    border: none;
+    
+}
+
+svg, p, nav, div, ul{
+    margin: 0;
+}
+
+a{
+    text-decoration: none;
+} 
+
+fieldset, button {
+    border: none;
+}
+li{
+    list-style: none
+}
+ul, fieldset{
+    padding: 0;
+}
+svg, h1, div, footer, a, h2, font, nav, button, img,li{
+    background-color: transparent;
+}

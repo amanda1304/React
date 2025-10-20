@@ -1,0 +1,57 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+#Dependências instaladas localmente (React)
+
+node_modules
+#Pastas de build do React (pode ser "build" ou "dist" dependendo do setup)
+
+build
+dist
+dist-ssr
+*.local
+
+#Configurações de Cache (Yarn, Babel, Webpack, etc.)
+
+.cache
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+coverage
+
+#Ignora pastas de ambiente virtual comuns (venv, env, .venv)
+
+venv/
+env/
+.venv/
+
+#Arquivos de Cache e Bytecode
+
+pycache/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.DS_Store
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

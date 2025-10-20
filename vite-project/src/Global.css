@@ -1,0 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import url(./reset.css);
+@import url(./make-access/footer.css);
+
+:root{
+    --primary-color:#264B5D;
+    --second-background-color:#E2E7E7;
+    --third-color:#A0B0B0;
+    --fourth-color:#A4C4C4;
+    
+}
+
+*{
+    font-family: "Inter", sans-serif;
+    background-color: white;
+    
+}

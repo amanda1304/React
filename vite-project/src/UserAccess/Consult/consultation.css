@@ -1,0 +1,12 @@
+
+div{
+    width: 100%;
+
+}
+article{
+    width: 80%;
+    margin-bottom: 1rem;
+    padding: .4rem;
+    border: 2px solid var(--fourth-color);
+    border-radius: 10px;
+}

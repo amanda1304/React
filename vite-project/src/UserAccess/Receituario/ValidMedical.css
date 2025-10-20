@@ -1,0 +1,16 @@
+@import url(../../reset.css);
+.wrapper-medical{
+    max-width: 100%;
+    align-items: center;
+    justify-items: center;
+    background-color: var(--second-background-color);
+
+}
+article{
+    width: 80%;
+    margin-bottom: .5rem;
+    padding: .4rem;
+    border: 2px solid var(--fourth-color);
+    border-radius: 10px;
+}
+

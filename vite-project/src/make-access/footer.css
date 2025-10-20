@@ -1,0 +1,29 @@
+@import url(../Global.css);
+footer{
+    display: flex;
+    justify-content: center;
+    height: 3rem; 
+    margin-top: 2rem;
+}
+footer > div{
+    margin-top: .5rem;
+}
+.footer-color{
+    text-align: center;
+    color: #737373;
+    font-size: .9rem;
+    padding: .2rem;
+}
+@media screen and (min-width:809px){
+    footer{
+        margin-top: .2rem;
+        margin-bottom: .9rem;
+    }
+    footer > div{
+        margin-top: .5rem;
+      
+    }
+     footer > div > p{
+       background-color: transparent; 
+     }
+}

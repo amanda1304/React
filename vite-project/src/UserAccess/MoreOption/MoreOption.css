@@ -1,0 +1,42 @@
+@import url(../../reset.css);
+nav{
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: column;
+    margin-bottom: 110px;
+}
+.list-aberta{
+    display: inline-flex;
+    max-width: 600px;
+    padding: 10px;
+    margin-bottom: .5rem;
+    background-color: white;
+    border: 2px solid gray;
+}
+.nav-more{
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: transparent;
+    text-align: center;
+    color: var(--primary-color);
+}
+.nav-more >img{
+    width: 30px;
+}
+.less-nav{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-items: center;
+    justify-content: center;
+    position: absolute;
+    margin-bottom: .2rem;
+}
+.less-nav> .img-less{
+    width: 82px;
+    
+    align-items: center;
+    background-color: white;
+}
