@@ -45,7 +45,7 @@ Antes de iniciar, verifique se possui instalado:
 
 ```bash
 # Clonar o repositório
-git clone https://github.com/SEU_USUARIO/plataforma-usuario-unificado.git
+git clone https://github.com/amanda1304/React.git
 
 # Entrar na pasta do projeto
 cd vite-project
