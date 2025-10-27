@@ -25,7 +25,7 @@ function MoreOption({ visivel, fecharMenu }){
                 
                 </ul>
                 <ul>
-                    <li >
+                    <li className='less-menu' >
                          <button
                             className="less-nav"
                             onClick={(event) => {

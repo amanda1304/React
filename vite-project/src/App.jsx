@@ -14,8 +14,8 @@ import MoreOption from "./UserAccess/MoreOption/MoreOption"
 import './make-access/Form.css'
 function App(){
   return(
+    <Routes>
 
-      <Routes>
         <Route path='/' element={<Login />}/>
         <Route path='/SendCode' element={<SendCode />}/>
         <Route path='/ValidCode' element ={<ValidCode />} />

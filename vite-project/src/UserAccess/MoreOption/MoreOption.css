@@ -23,6 +23,7 @@ nav{
     color: var(--primary-color);
 }
 .nav-more >img{
+
     width: 30px;
 }
 .less-nav{
@@ -34,7 +35,11 @@ nav{
     position: absolute;
     margin-bottom: .2rem;
 }
-.less-nav> .img-less{
+.less-menu{
+
+    margin-bottom: 6.8rem;
+}
+.img-less{
     width: 82px;
     
     align-items: center;

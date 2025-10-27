@@ -1,10 +1,66 @@
-
+import React, { useState } from 'react';
 import medicine from './UserAccess/assets/images/Medicine-bro.svg'
 import './make-access/Form.css'
-import { Link } from 'react-router-dom'
-
+import { Link,useNavigate } from 'react-router-dom'
+const API_LOGIN_URL = 'http://localhost:8001/api/login/';
 
 function Login() {
+  const [cpf, setCpf] = useState('');
+  const [password, setPassword] = useState(''); 
+  const [Error, setError] = useState('');
+  
+  // Hook para navegação programática
+  const navigate = useNavigate(); 
+
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // Previne o recarregamento padrão do formulário
+    setError('');
+  const cleanCpf = cpf.replace(/\D/g, ''); 
+      // O payload corrigido (cpf e password) está sendo mantido.
+  const payload = {
+    cpf: cleanCpf,
+    password: password,
+  };
+  try {
+      const response = await fetch(API_LOGIN_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+      const data = await response.json();
+
+      if (response.ok) {
+        // SUCESSO!
+        console.log("Login bem-sucedido. Token recebido:", data.token);
+
+        // 1. Armazenar o Token para uso futuro (melhor prática para autenticação)
+        localStorage.setItem('auth_token', data.token);
+        localStorage.setItem('user_id', data.user_id);
+        
+        // 2. Redirecionar para a tela Home (como você solicitou)
+        navigate('/Home'); 
+
+      } else {
+       const errorMessage = data.non_field_errors?.[0] || data.detail || 'Credenciais inválidas. Verifique seu CPF e senha.';
+        setError(errorMessage);
+      } 
+    } catch (err) {
+      // ERRO DE REDE/CORS (servidor Django fora do ar, erro de porta, etc.)
+      console.error("Erro na requisição:", err);
+      setError('Falha de conexão com o servidor. Verifique se o Django está ativo na porta 8001.');
+    }
+  };
+  // Função para formatar o CPF visualmente no campo
+  const formatCpf = (value) => {
+    value = value.replace(/\D/g, '');
+    if (value.length > 11) value = value.substring(0, 11);
+    value = value.replace(/(\d{3})(\d)/, '$1.$2');
+    value = value.replace(/(\d{3})(\d)/, '$1.$2');
+    value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+    return value;
+  };
   return (
     <>
       <section>
@@ -12,11 +68,14 @@ function Login() {
             <img src={medicine} alt="Desenho de médico" />
             <h1>Acesso usuario <br /> unificado</h1>
           </div>
-          <form  action=""method="post">
+          <form  action=""method="post"onSubmit={handleSubmit}>
             <fieldset>
             <legend>
               Login do Usuário
             </legend>
+
+             {Error && <p style={{ color: 'red', textAlign: 'center', marginBottom: '20px' }}>{Error}</p>}
+
             <div className ="input-wrapper">
                 <label htmlFor="cpf" className="label-form">CPF:</label>
                   <div className ="input-container">
@@ -32,6 +91,8 @@ function Login() {
                         maxlength="11"
                         autocomplete="off" 
                         required 
+                        value={formatCpf(cpf)}
+                        onChange={(e) => setCpf(e.target.value)}
                       /> 
                   </div>
              </div>
@@ -42,7 +103,15 @@ function Login() {
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="25" viewBox="0 0 24 25" fill="none">
                         <path d="M16.5 11V7.25C16.5 6.05653 16.0259 4.91193 15.182 4.06802C14.3381 3.22411 13.1935 2.75 12 2.75C10.8065 2.75 9.66193 3.22411 8.81802 4.06802C7.97411 4.91193 7.5 6.05653 7.5 7.25V11M6.75 22.25H17.25C17.8467 22.25 18.419 22.0129 18.841 21.591C19.2629 21.169 19.5 20.5967 19.5 20V13.25C19.5 12.6533 19.2629 12.081 18.841 11.659C18.419 11.2371 17.8467 11 17.25 11H6.75C6.15326 11 5.58097 11.2371 5.15901 11.659C4.73705 12.081 4.5 12.6533 4.5 13.25V20C4.5 20.5967 4.73705 21.169 5.15901 21.591C5.58097 22.0129 6.15326 22.25 6.75 22.25Z" stroke="#737373" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
-                    <input type="password" name="" id="password" formmethod="post" placeholder="Senha" maxlength="20" aria-live="assertive"/>
+                    <input type="password" 
+                      name="" id="password" 
+                      formmethod="post" 
+                      placeholder="Senha" 
+                      maxlength="20" 
+                      aria-live="assertive"
+                      value={password} 
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
                </div>
             </div>
            <div id ="div-esqueci">

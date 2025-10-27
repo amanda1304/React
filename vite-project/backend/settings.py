@@ -11,8 +11,9 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
-import os
+
 from dotenv import load_dotenv
+import os
 
 load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -40,9 +41,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'backend.apps.BackendConfig', 
+    'rest_framework',
+    'rest_framework.authtoken',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -50,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.security.SecurityMiddleware',
 ]
 
 ROOT_URLCONF = 'backend.urls'
@@ -57,7 +64,7 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'dist'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -68,9 +75,11 @@ TEMPLATES = [
         },
     },
 ]
-
+AUTHENTICATION_BACKENDS = [
+    'backend.auth_backend.CustomAuthBackend', # O novo backend!
+    'django.contrib.auth.backends.ModelBackend',
+]
 WSGI_APPLICATION = 'backend.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
@@ -89,7 +98,7 @@ DATABASES = {
         }
     }
 }
-print(DB_NAME, DB_USER, DB_HOST)
+print(os.getenv("DB_NAME"))
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -126,7 +135,22 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS =[BASE_DIR /'dist' / 'static']
+STATIC_ROOT = BASE_DIR / 'static_collected'
 
+AUTH_USER_MODEL = 'backend.UsuarioUnificado' 
+# Use 'backend.' porque o modelo está no app 'backend'.
+#2.  **Ação Crítica:** Depois de ajustar os arquivos, você **deve** usar o `shell` para criptografar a senha do Irineu. **É a única maneira de resolver o `400 Bad Request`.**
+
+CORS_ALLOWED_ORIGINS = [
+    # A porta padrão do servidor de desenvolvimento do React
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    # Se você for usar o Vite (que é o que está no seu path)
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    # Adicione qualquer outro domínio ou porta que o seu frontend for usar
+]
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
