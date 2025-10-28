@@ -9,11 +9,11 @@ function Tiposervico() {
     const navigate = useNavigate();
 
     const handleSelect = (servico) => {
-        // Navega para a página de agendamento passando o serviço selecionado
+        // Navega para a página de subserviços passando o tipo selecionado
         try {
-            navigate('/Agenda', { state: { servico } });
+            navigate('/Subservico', { state: { tipo: servico } });
         } catch (e) {
-            console.error('Erro ao navegar para Agenda:', e);
+            console.error('Erro ao navegar para Subservico:', e);
         }
     };
 

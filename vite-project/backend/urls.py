@@ -35,6 +35,7 @@ urlpatterns = [
     path('api/agenda/', views.AgendaView.as_view(), name='agenda'),
     path('api/tipo_servicos/', views.TipoServicoView.as_view(), name='tipo_servicos'),
     path('api/subservicos/', views.SubservicosView.as_view(), name='subservicos'),
+    path('api/horarios/', views.HorariosDisponiveisView.as_view(), name='horarios_disponiveis'),
     # Exemplo da sua View de Teste
     path('api/teste/', views.TesteConexaoView.as_view(), name='teste_conexao'),
 ]

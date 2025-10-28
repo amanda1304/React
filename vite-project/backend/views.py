@@ -223,12 +223,226 @@ class SubservicosView(APIView):
 
     def get(self, request, format=None):
         from django.db import connection
-        with connection.cursor() as cursor:
-            cursor.execute(
-                "SELECT id_subservico, id_tipo_servico, nome_subservico FROM subservicos ORDER BY nome_subservico ASC"
-            )
-            cols = [col[0] for col in cursor.description]
-            rows = cursor.fetchall()
+        tipo_id = request.query_params.get('tipo_id') or request.query_params.get('id_tipo')
 
-        subservicos = [dict(zip(cols, row)) for row in rows]
-        return Response(subservicos, status=status.HTTP_200_OK)
+        # Tenta buscar por tipo quando fornecido; caso contrário retorna todos
+        try:
+            with connection.cursor() as cursor:
+                # Primeiro, veja se existe uma tabela chamada exatamente 'subservicos'
+                cursor.execute(
+                    "SELECT table_name FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = %s",
+                    ['subservicos']
+                )
+                exists = [r[0] for r in cursor.fetchall()]
+
+                candidate_tables = []
+                if exists:
+                    candidate_tables = ['subservicos']
+                else:
+                    # Procura por qualquer tabela contendo 'sub' no nome
+                    cursor.execute(
+                        "SELECT table_name FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name LIKE %s",
+                        ["%sub%"]
+                    )
+                    candidate_tables = [r[0] for r in cursor.fetchall()]
+
+                # Tente consultar cada tabela candidata até encontrar linhas
+                found = False
+                subservicos = []
+                for tbl in candidate_tables:
+                    try:
+                        # pega colunas da tabela
+                        cursor.execute(
+                            "SELECT column_name FROM information_schema.columns WHERE table_schema = DATABASE() AND table_name = %s",
+                            [tbl]
+                        )
+                        cols_tbl = [r[0] for r in cursor.fetchall()]
+
+                        # decide coluna de tipo
+                        tipo_col = None
+                        if 'id_tipo_servico' in cols_tbl:
+                            tipo_col = 'id_tipo_servico'
+                        elif 'id_tipo' in cols_tbl:
+                            tipo_col = 'id_tipo'
+
+                        if tipo_id and tipo_col:
+                            cursor.execute(f"SELECT * FROM {tbl} WHERE {tipo_col} = %s", [tipo_id])
+                        else:
+                            cursor.execute(f"SELECT * FROM {tbl}")
+
+                        cols = [col[0] for col in cursor.description] if cursor.description else []
+                        rows = cursor.fetchall()
+
+                        if rows:
+                            subservicos = [dict(zip(cols, row)) for row in rows]
+                            found = True
+                            break
+                    except Exception:
+                        # ignore e tenta próximo
+                        continue
+
+            # Normalize different schemas into common keys expected by frontend
+            normalized = []
+            for s in subservicos:
+                norm = dict(s)  # shallow copy
+                # map id_subservico
+                if 'id_subservico' not in norm:
+                    if 'id_subtipo' in norm:
+                        norm['id_subservico'] = norm.get('id_subtipo')
+                    elif 'id' in norm:
+                        norm['id_subservico'] = norm.get('id')
+                # map id_tipo_servico
+                if 'id_tipo_servico' not in norm:
+                    if 'id_tipo' in norm:
+                        norm['id_tipo_servico'] = norm.get('id_tipo')
+                # map nome_subservico
+                if 'nome_subservico' not in norm:
+                    if 'nome_servico' in norm:
+                        norm['nome_subservico'] = norm.get('nome_servico')
+                    elif 'nome' in norm:
+                        norm['nome_subservico'] = norm.get('nome')
+
+                normalized.append(norm)
+
+            subservicos = normalized
+            # Se não encontrou nada, tente inspecionar tabelas relacionadas para diagnóstico
+            if not subservicos:
+                diagnostic = []
+                try:
+                    with connection.cursor() as c2:
+                        c2.execute(
+                            "SELECT table_name FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name LIKE %s",
+                            ["%sub%"]
+                        )
+                        tables = [r[0] for r in c2.fetchall()]
+
+                    for tbl in tables:
+                        try:
+                            with connection.cursor() as c3:
+                                c3.execute(
+                                    "SELECT column_name FROM information_schema.columns WHERE table_schema = DATABASE() AND table_name = %s",
+                                    [tbl]
+                                )
+                                cols_tbl = [r[0] for r in c3.fetchall()]
+
+                                # pega até 5 linhas de exemplo
+                                try:
+                                    c3.execute(f"SELECT * FROM {tbl} LIMIT 5")
+                                    sample_cols = [col[0] for col in c3.description] if c3.description else []
+                                    sample_rows = c3.fetchall()
+                                except Exception:
+                                    sample_cols = []
+                                    sample_rows = []
+
+                                diagnostic.append({
+                                    'table': tbl,
+                                    'columns': cols_tbl,
+                                    'sample_rows': [dict(zip(sample_cols, r)) for r in sample_rows]
+                                })
+                        except Exception:
+                            continue
+                except Exception:
+                    diagnostic = []
+
+                # Retorna lista vazia mas com diagnóstico auxiliar para debug do schema
+                return Response({'subservicos': [], '_diagnostic_tables': diagnostic}, status=status.HTTP_200_OK)
+
+            return Response(subservicos, status=status.HTTP_200_OK)
+        except Exception as e:
+            # Fallback: se a tabela não existir ou outro erro, registra e retorna erro 500 com mensagem
+            err = str(e)
+            if '1146' in err or "doesn't exist" in err or 'does not exist' in err:
+                return Response([], status=status.HTTP_200_OK)
+            return Response({'error': err}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class HorariosDisponiveisView(APIView):
+    """Retorna horários disponíveis relacionados a um subserviço (ou todos)."""
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, format=None):
+        from django.db import connection
+        sub_id = request.query_params.get('subservico_id') or request.query_params.get('id_subtipo') or request.query_params.get('id_subservico')
+
+        try:
+            with connection.cursor() as cursor:
+                # identifica tabelas candidatas: prefer 'horarios_disponiveis'
+                cursor.execute(
+                    "SELECT table_name FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = %s",
+                    ['horarios_disponiveis']
+                )
+                exists = [r[0] for r in cursor.fetchall()]
+
+                candidate_tables = []
+                if exists:
+                    candidate_tables = ['horarios_disponiveis']
+                else:
+                    # procurar tabelas com 'hora' ou 'dispon' no nome
+                    cursor.execute(
+                        "SELECT table_name FROM information_schema.tables WHERE table_schema = DATABASE() AND (table_name LIKE %s OR table_name LIKE %s)",
+                        ["%hora%", "%dispon%"]
+                    )
+                    candidate_tables = [r[0] for r in cursor.fetchall()]
+
+                horarios = []
+                for tbl in candidate_tables:
+                    try:
+                        cursor.execute(
+                            "SELECT column_name FROM information_schema.columns WHERE table_schema = DATABASE() AND table_name = %s",
+                            [tbl]
+                        )
+                        cols_tbl = [r[0] for r in cursor.fetchall()]
+
+                        # possíveis colunas que ligam ao subservico
+                        rel_cols = [c for c in ['id_subservico', 'id_subtipo', 'id_sub', 'id_subserv'] if c in cols_tbl]
+
+                        # possíveis colunas de horário/dia
+                        dia_cols = [c for c in ['dia_semana', 'dia', 'weekday'] if c in cols_tbl]
+                        inicio_cols = [c for c in ['hora_inicio', 'hora_inicio_str', 'inicio', 'start_time'] if c in cols_tbl]
+                        fim_cols = [c for c in ['hora_fim', 'fim', 'end_time'] if c in cols_tbl]
+
+                        if sub_id and rel_cols:
+                            rel = rel_cols[0]
+                            cursor.execute(f"SELECT * FROM {tbl} WHERE {rel} = %s", [sub_id])
+                        else:
+                            cursor.execute(f"SELECT * FROM {tbl}")
+
+                        cols = [col[0] for col in cursor.description] if cursor.description else []
+                        rows = cursor.fetchall()
+
+                        if rows:
+                            horarios = [dict(zip(cols, row)) for row in rows]
+                            # normalize keys
+                            normalized = []
+                            for h in horarios:
+                                n = dict(h)
+                                if 'id_horario' not in n:
+                                    if 'id' in n:
+                                        n['id_horario'] = n.get('id')
+                                if 'dia_semana' not in n:
+                                    if 'dia' in n:
+                                        n['dia_semana'] = n.get('dia')
+                                if 'hora_inicio' not in n and inicio_cols:
+                                    n['hora_inicio'] = n.get(inicio_cols[0])
+                                if 'hora_fim' not in n and fim_cols:
+                                    n['hora_fim'] = n.get(fim_cols[0])
+                                # mapa relação para id_subservico
+                                if 'id_subservico' not in n:
+                                    for rc in rel_cols:
+                                        if rc in n:
+                                            n['id_subservico'] = n.get(rc)
+                                            break
+                                normalized.append(n)
+
+                            return Response(normalized, status=status.HTTP_200_OK)
+                    except Exception:
+                        continue
+
+            # se nada encontrado, retorna lista vazia
+            return Response([], status=status.HTTP_200_OK)
+        except Exception as e:
+            err = str(e)
+            if '1146' in err or "doesn't exist" in err or 'does not exist' in err:
+                return Response([], status=status.HTTP_200_OK)
+            return Response({'error': err}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
