@@ -1,4 +1,4 @@
-import SucessIcon from '../../assets/sucess.png';
+import SucessIcon from '../assets/images/sucess.png';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
