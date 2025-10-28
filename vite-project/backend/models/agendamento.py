@@ -24,7 +24,8 @@ class Agendamento(models.Model):
     id_agendamento = AutoField(primary_key=True, db_column='id_agendamento', verbose_name="ID Agendamento")
     paciente_nome = models.CharField(max_length=150, verbose_name="Nome do Paciente")
     horario = models.DateTimeField(verbose_name="Data e Hora do Agendamento")
-    tipo_consulta = models.CharField(max_length=100, verbose_name="Especialidade Médica")
+    tipo_consulta = models.CharField(max_length=100, verbose_name="Tipo de Consulta")
+    subtipo_consulta = models.CharField(max_length=100, verbose_name="Especialidade da Consulta")
     status = models.DateTimeField(auto_now_add=True, verbose_name="status do agendamento")
 
     class Meta:

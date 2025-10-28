@@ -180,6 +180,81 @@ class AgendaView(APIView):
 
         agendamentos = [dict(zip(cols, row)) for row in rows]
         return Response(agendamentos, status=status.HTTP_200_OK)    
+
+    def post(self, request, format=None):
+        """Cria um novo agendamento. Espera JSON com pelo menos: id_tipo, id_subservico (opcional), data e hora (ou data_hora ISO)."""
+        user = request.user
+        data = request.data
+        # aceitar tanto 'id_tipo_servico' quanto 'id_tipo' no payload
+        id_tipo = data.get('id_tipo_servico') or data.get('id_tipo')
+        id_sub = data.get('id_subservico') or data.get('id_subtipo')
+        observacoes = data.get('observacoes', '')
+        status_ag = data.get('status', 'Pendente')
+
+        # construir data_hora
+        data_hora = data.get('data_hora')
+        if not data_hora:
+            data_str = data.get('data')
+            hora_str = data.get('hora')
+            if data_str and hora_str:
+                # assume ISO-like date and time
+                data_hora = f"{data_str} {hora_str}"
+
+        if not id_tipo or not data_hora:
+            return Response({'detail': 'Campos obrigatórios faltando: id_tipo e data_hora (ou data+hora).'}, status=status.HTTP_400_BAD_REQUEST)
+
+        from django.db import connection
+        try:
+            with connection.cursor() as cursor:
+                # detecta se coluna id_subservico existe
+                cursor.execute("SELECT column_name FROM information_schema.columns WHERE table_schema = DATABASE() AND table_name = %s", ['agendamentos'])
+                cols_tbl = [r[0] for r in cursor.fetchall()]
+
+                # escolhe o nome da coluna de tipo conforme o schema atual
+                if 'id_tipo_servico' in cols_tbl:
+                    tipo_col_name = 'id_tipo_servico'
+                elif 'id_tipo' in cols_tbl:
+                    tipo_col_name = 'id_tipo'
+                else:
+                    # fallback: usa id_tipo
+                    tipo_col_name = 'id_tipo'
+
+                fields = ['id_usuario', tipo_col_name, 'data_hora', 'status', 'observacoes']
+                values = [user.pk, id_tipo, data_hora, status_ag, observacoes]
+
+                # se existir coluna id_subservico e foi fornecido, insere-a antes de data_hora
+                if 'id_subservico' in cols_tbl and id_sub:
+                    fields.insert(2, 'id_subservico')
+                    values.insert(2, id_sub)
+
+                # se existir coluna id_horario e foi fornecido, insere na posição adequada
+                id_horario = data.get('id_horario') or data.get('horario_id') or data.get('id_hora')
+                if 'id_horario' in cols_tbl and id_horario:
+                    # colocar id_horario logo após id_subservico se presente, senão após id_tipo_servico
+                    if 'id_subservico' in fields:
+                        pos = fields.index('id_subservico') + 1
+                    else:
+                        pos = fields.index(tipo_col_name) + 1
+                    fields.insert(pos, 'id_horario')
+                    values.insert(pos, id_horario)
+
+                placeholders = ','.join(['%s'] * len(fields))
+                fields_sql = ','.join(fields)
+                sql = f"INSERT INTO agendamentos ({fields_sql}) VALUES ({placeholders})"
+                cursor.execute(sql, values)
+                # retorna o último id inserido
+                cursor.execute("SELECT LAST_INSERT_ID()")
+                last = cursor.fetchone()[0]
+
+                # buscar registro criado
+                cursor.execute("SELECT * FROM agendamentos WHERE id_agendamento = %s", [last])
+                cols = [col[0] for col in cursor.description]
+                row = cursor.fetchone()
+                ag = dict(zip(cols, row)) if row else {}
+
+            return Response(ag, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
 class TipoServicoView(APIView):
     """Retorna a lista de tipos de serviços disponíveis."""

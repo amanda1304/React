@@ -31,10 +31,10 @@ function App(){
         <Route path='/Exam' element={<Exam />}/>
         <Route path='/Menu' element={<Menu />} />
         <Route path='/MoreOption' element={<MoreOption />} />
-  <Route path= '/Tiposervico' element ={<Tiposervico />} />
-  <Route path= '/Subservico' element ={<Subservico />} />
-  <Route path= '/Horarios' element ={<Horarios />} />
-    <Route path= '/Sucesso' element ={<SucessoAgendamento />} />
+        <Route path= '/Tiposervico' element ={<Tiposervico />} />
+        <Route path= '/Subservico' element ={<Subservico />} />
+        <Route path= '/Horarios' element ={<Horarios />} />
+        <Route path= '/Sucesso' element ={<SucessoAgendamento />} />
         <Route path='*' element={<h1>Not Found</h1>}/>
       </Routes>
  
