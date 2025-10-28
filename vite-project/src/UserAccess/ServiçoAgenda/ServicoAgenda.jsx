@@ -1,6 +1,7 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from 'react';
 import Menu from "../Menu/Menu";
+import './Servico.css';
 function Tiposervico() {
     const [Tiposervico, setTiposervico] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -76,20 +77,22 @@ function Tiposervico() {
 
     return (
         <>
+        <section>
+
             <h2>Nova Consulta</h2>
             <h3>Selecione o tipo de consulta:</h3>
            <nav>
                  {/* A ESTRUTURA DE REPETIÇÃO: mapeando o array tiposervico para gerar os links */}
                     <ul className="space-y-4">
                         {Tiposervico.map((servico) => (
-                            <li key={servico.id}>
+                            <li className="button-nav" key={servico.id}>
                                 <div
                                     onClick={() => handleSelect(servico)}
-                                    className="cursor-pointer p-3 border rounded hover:bg-gray-50"
+                                    
                                 >
-                                    <div>
+                                    <div className="div-servico-nav">
                                         <p className="font-medium">{servico.nome}</p>
-                                        <p className="text-sm text-gray-600">{servico.descricao}</p>
+                                        
                                     </div>
                                 </div>
                             </li>
@@ -99,6 +102,7 @@ function Tiposervico() {
             <div className='div-menu'>
                     <Menu />
             </div>
+        </section>
         </>
     );
 }
