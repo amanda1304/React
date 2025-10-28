@@ -11,6 +11,7 @@ import Agenda from './UserAccess/Agenda/Agenda'
 import Exam from './UserAccess/Exam/Exam'
 import Menu from './UserAccess/Menu/Menu';
 import MoreOption from "./UserAccess/MoreOption/MoreOption"
+import Tiposervico from './UserAccess/ServiçoAgenda/ServicoAgenda';
 import './make-access/Form.css'
 function App(){
   return(
@@ -27,6 +28,7 @@ function App(){
         <Route path='/Exam' element={<Exam />}/>
         <Route path='/Menu' element={<Menu />} />
         <Route path='/MoreOption' element={<MoreOption />} />
+        <Route path= '/Tiposervico' element ={<Tiposervico />} />
         <Route path='*' element={<h1>Not Found</h1>}/>
       </Routes>
  

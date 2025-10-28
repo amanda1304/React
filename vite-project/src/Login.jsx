@@ -35,9 +35,14 @@ function Login() {
         // SUCESSO!
         console.log("Login bem-sucedido. Token recebido:", data.token);
 
-        // 1. Armazenar o Token para uso futuro (melhor prática para autenticação)
-        localStorage.setItem('auth_token', data.token);
-        localStorage.setItem('user_id', data.user_id);
+  // 1. Armazenar o Token para uso futuro (melhor prática para autenticação)
+  localStorage.setItem('auth_token', data.token);
+  // Compatibiliza possíveis chaves retornadas pelo backend
+  const returnedId = data.id_usuario || data.user_id || data.id || '';
+  localStorage.setItem('user_id', returnedId);
+  // Armazena o nome do usuário, se fornecido pelo backend
+  const returnedName = data.user_name || data.nome || data.name || '';
+  if (returnedName) localStorage.setItem('user_name', returnedName);
         
         // 2. Redirecionar para a tela Home (como você solicitou)
         navigate('/Home'); 

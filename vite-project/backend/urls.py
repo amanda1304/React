@@ -29,7 +29,12 @@ urlpatterns = [
     # Mude: Remova o "include" e defina o caminho completo da API.
     # O caminho será agora http://localhost:8000/api/teste/
    path('api/login/', views.LoginView.as_view(), name='login'),
-    
+    path('api/me/', views.MeView.as_view(), name='me'),
+    path('api/receitas/', views.ReceitasView.as_view(), name='receitas'),
+    path('api/exames/', views.ExamesView.as_view(), name='exames'),
+    path('api/agenda/', views.AgendaView.as_view(), name='agenda'),
+    path('api/tipo_servicos/', views.TipoServicoView.as_view(), name='tipo_servicos'),
+    path('api/subservicos/', views.SubservicosView.as_view(), name='subservicos'),
     # Exemplo da sua View de Teste
     path('api/teste/', views.TesteConexaoView.as_view(), name='teste_conexao'),
 ]

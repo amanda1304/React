@@ -6,7 +6,7 @@ function UserInform (){
     return(
         <>
         <section>
-            <h1>mudar texto aqui ficará outras partes</h1>
+            <h1>Perfil</h1>
             <PersonInform/>
             <PacienteInform />
             <div className='div-menu'>
