@@ -10,7 +10,7 @@ A **Plataforma do Usuário Unificado** busca simplificar o acesso às informaç�
 Com ela, o usuário pode visualizar exames, consultas e laudos.
 
 ---
-## Acesso ao aplicativo web
+## :movie_camera: Acesso ao aplicativo web
 O video mostra o acesso de um usuario-teste
 
   https://github.com/user-attachments/assets/9a47bd20-0aba-42eb-955b-1d638fdd6c57
