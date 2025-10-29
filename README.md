@@ -12,9 +12,9 @@ Com ela, o usuário pode visualizar exames, consultas e laudos.
 ---
 ## Acesso ao aplicativo web
 O video mostra o acesso de um usuario-teste
-<div align='center'>
-  [https://github.com/user-attachments/assets/9a47bd20-0aba-42eb-955b-1d638fdd6c57]
-</div>
+
+  https://github.com/user-attachments/assets/9a47bd20-0aba-42eb-955b-1d638fdd6c57
+
 
 ---
 ## ✨ Funcionalidades Principais
