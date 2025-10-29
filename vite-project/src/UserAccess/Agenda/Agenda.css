@@ -1,3 +1,16 @@
 .div-menu{
     height: 90px;
 }
+.btn-agendar{
+    width: 80%;
+    height: 40px;
+    background-color: var(--fourth-color);
+    border: none;
+    border-radius: 20px;
+    font-size: 18px;
+    color: var(--primary-color);
+    cursor: pointer;
+    margin-top: 20px;
+    box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.30);
+    
+}

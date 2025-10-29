@@ -20,3 +20,13 @@ h2{
     border: 2px solid var(--primary-color);
     border-radius: 50px;
 }
+.btn-escolha{
+    width: 100%;
+    padding: 0.5rem 1rem;
+    font-size: 1.2rem;
+    border: 2px solid var(--primary-color);
+    border-radius: 50px;
+    color: var(--primary-color);
+    font-weight: 600;
+    cursor: pointer;
+}

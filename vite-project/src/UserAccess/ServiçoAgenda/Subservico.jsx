@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-
+import Menu from "../Menu/Menu";
+import './Servico.css'
 function Subservico() {
     const location = useLocation();
     const tipo = location.state?.tipo || null; // objeto do tipo selecionado
@@ -63,7 +64,7 @@ function Subservico() {
     }
 
     return (
-        <div>
+        <div className='container-servico'>
             <h2> {tipo.nome || tipo.title || tipo.nome_servico || 'Serviço'}</h2>
 
             {loading && <p>Carregando subserviços...</p>}
@@ -72,27 +73,29 @@ function Subservico() {
             {!loading && !error && (
                 <nav>
                     {subservicos.length === 0 ? (
-                        <div>
+                        <div >
                             <p>Nenhum subserviço encontrado para este tipo.</p>
                             <button onClick={() => navigate('/Tiposervico')}>Voltar para tipos</button>
-                            <button onClick={handleRetry} style={{ marginLeft: '8px' }}>Recarregar</button>
+                            <button onClick={handleRetry} >Recarregar</button>
                         </div>
                     ) : (
                         <ul>
                             {subservicos.map((s) => (
-                                <li key={s.id_subservico || s.id || JSON.stringify(s)}>
-                                    <button
+                                <li className="button-nav" key={s.id_subservico || s.id || JSON.stringify(s)}>
+                                    <button className='btn-escolha'
                                         onClick={() => navigate('/Horarios', { state: { subservico: s, tipo } })}
-                                        style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
+                                        
                                     >
                                         {s.nome_subservico || s.nome_servico || s.nome || JSON.stringify(s)}
                                     </button>
                                 </li>
                             ))}
+
                         </ul>
                     )}
                 </nav>
-            )}2025
+            )}
+            <Menu />
         </div>
     );
 }

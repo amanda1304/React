@@ -9,12 +9,12 @@ function Agenda (){
 
      return(
         <>
-        <section>
+        <section className='content-user'>
             <h1>agendamentos/encaminhamento</h1>
            
         
-            <button>
-                <NavLink to="/Tiposervico" end className={({isActive}) => isActive? "on-link" : "link" } className="link-agendar">
+            <button className="btn-agendar">
+                <NavLink to="/Tiposervico" end className={({isActive}) => isActive? "on-link" : "link" } >
                     Agendar Consulta
                 </NavLink>
             </button>

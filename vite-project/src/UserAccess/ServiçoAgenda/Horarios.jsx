@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import Menu from '../Menu/Menu'
 import './Horarios.css'
 
 export default function Horarios() {
@@ -99,6 +100,7 @@ export default function Horarios() {
 
   if (!sub) {
     return (
+      
       <div>
         <h2>Horários</h2>
         <p>Nenhum subserviço selecionado. Volte e escolha um subserviço.</p>
@@ -143,10 +145,13 @@ export default function Horarios() {
       )}
 
       <div className='actions'>
+
         <button disabled={loading} onClick={handleAgendar} className='button-agendar'>
           {loading ? 'Agendando...' : 'Agendar Consulta'}
         </button>
+
       </div>
+      <Menu />
     </div>
   )
 }

@@ -20,6 +20,7 @@ function Menu (){
     const NavItems = ({ compact=false, moreElement = null }) => (
         <>
             <li className={compact? "option-list compact" : "option-list"}>
+                
                 <NavLink to='/Home' end className={({isActive}) => isActive? "on-link" : "link" }>
                     <svg xmlns="http://www.w3.org/2000/svg" width="27" height="28" viewBox="0 0 27 28" fill="none">
                         <path d="M3.37943 10.625L13.5044 2.75L23.6294 10.625V23C23.6294 23.5967 23.3924 24.169 22.9704 24.591C22.5485 25.0129 21.9762 25.25 21.3794 25.25H5.62943C5.03269 25.25 4.46039 25.0129 4.03843 24.591C3.61648 24.169 3.37943 23.5967 3.37943 23V10.625Z" stroke="#264B5D" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>

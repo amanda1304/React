@@ -5,10 +5,10 @@ import './user-inform.css'
 function UserInform (){
     return(
         <>
-        <section>
+        <section className='content-user'>
             <h1>Perfil</h1>
             <PersonInform/>
-            <PacienteInform />
+            
             <div className='div-menu'>
                     <Menu />
             </div>

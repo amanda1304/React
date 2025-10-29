@@ -1,8 +1,9 @@
+import "./consultation.css"
 function HistoricoCunsul (){
     return(
         <>
-             <div>
-                <h2>Próximas consultas</h2>
+             <div className="consultation">
+                <h2>Histórico consultas</h2>
 
             <article>
                 <h3>ODONTOLIGIA</h3>

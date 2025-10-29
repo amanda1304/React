@@ -12,7 +12,7 @@ function SendCode() {
                     <h1>Recuperar Senha</h1>
                     <h2>Informe o seu e-mail ou telefone cadastrado para recuperar a senha.</h2>
                 </hgroup>
-                <form action="" method="post">
+                <form  className='acesso' action="" method="post">
                     <fieldset>
 
                         <div class="input-wrapper">

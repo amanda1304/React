@@ -15,7 +15,7 @@ export default function Consul() {
       setError(null)
       try {
         // Buscar serviços primeiro
-        const servicosRes = await fetch('http://127.0.0.1:8001/api/servicos/', { // Ajuste a URL conforme sua API
+        const servicosRes = await fetch('http://127.0.0.1:8001/api/subservicos/', { // Ajuste a URL conforme sua API
           headers: { Authorization: token ? `Token ${token}` : '' }
         })
         

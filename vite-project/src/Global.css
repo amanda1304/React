@@ -7,6 +7,9 @@
     --second-background-color:#E2E7E7;
     --third-color:#A0B0B0;
     --fourth-color:#A4C4C4;
+    --five-color-fonts:#393c3f;
+    --six-color-font-input-off:#999999;
+    --seven-color-input-off:#D5D5D5;
     
 }
 
@@ -14,4 +17,9 @@
     font-family: "Inter", sans-serif;
     background-color: white;
     
+}
+html, body, #root { 
+    height: 100%; /* Garante que a raiz do documento ocupe toda a viewport */
+    margin: 0;
+    padding: 0;
 }

@@ -1,0 +1,64 @@
+
+form > fieldset{
+    background-color: transparent;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--third-color);
+    padding: 8px;
+}
+fieldset > legend{
+    font-size: 18px;
+    font-weight: bold;
+    margin: 8px 0;
+}
+fieldset > legend > h3{
+  margin: 8px;
+}
+.agrupamento{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    justify-items: center;
+    max-width: 100%;
+}
+.agrupamento-vertical{
+    display: flex;
+    flex-direction: column;
+
+}
+.wrapper-input{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.wrapper-input > label{
+    width: 70%;
+}
+input{
+    width: 80%;
+    background-color: var(--seven-color-input-off);
+    color: var(--six-color-font-input-off);
+    border: 1px solid;
+    border-color: var(--six-color-font-input-off);
+    border-radius: 20px;
+    padding: 10px;
+    margin:8px 0 ;
+    font-size: 14px;
+}
+.alteravel{
+    background-color: white;
+    color: var(--five-color-fonts);
+}
+.salva{
+    width: 30%;
+    background-color: var(--fourth-color);
+    color: var(--primary-color);
+    font-weight: bold;
+    border-radius: 20px;
+    border: none;
+    padding: 10px;
+    margin-top: 16px;
+    cursor: pointer;
+    box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.30);
+}

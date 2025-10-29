@@ -1,7 +1,7 @@
-input{
+/*input{
     border: none;
     
-}
+}*/
 
 svg, p, nav, div, ul{
     margin: 0;
@@ -10,16 +10,13 @@ svg, p, nav, div, ul{
 a{
     text-decoration: none;
 } 
-
-fieldset, button {
-    border: none;
-}
+ 
 li{
     list-style: none
 }
 ul, fieldset{
     padding: 0;
 }
-svg, h1, div, footer, a, h2, font, nav, button, img,li{
+svg, h1, div, footer, a, h2, font, nav, img,li, fieldset, h2, form, h3, label, legend {
     background-color: transparent;
 }

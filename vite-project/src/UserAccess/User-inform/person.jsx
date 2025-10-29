@@ -81,24 +81,25 @@ function PersonInform({ usuario = null }){
             <form action="#">
                 <fieldset>
                     <legend>
-                        <h2>Informações pessoais</h2>
+                        <h3>Informações pessoais</h3>
                     </legend>
-                    <div>
+                    <div className='agrupamento-vertical'>
                         <label htmlFor="nome">Nome:</label>
                         <input id="nome"  type="text" readOnly value={displayName}/>
                     </div>
 
-                    <div>
-                        <div>
-                        <label htmlFor="datanasc">Data Nasc.:</label>
-                        <input id="datanasc" type="date" value={displaydate} readOnly/>
+                    <div className='agrupamento'>
+                        <div className='wrapper-input'>
+                            <label htmlFor="datanasc">Data Nasc.:</label>
+                            <input id="datanasc" type="date" value={displaydate} readOnly/>
                         </div>
-                        <div>
-                        <label htmlFor="cpf">CPF:</label>
-                        <input id="cpf" type="text" value={displaycpf} readOnly/>
+
+                        <div className='wrapper-input'>
+                            <label htmlFor="cpf">CPF:</label>
+                            <input id="cpf" type="text" value={displaycpf} readOnly/>
                         </div>
                         
-                        <div>
+                        <div className='wrapper-input'>
                         <label htmlFor="rg">RG:</label>
                         <input id="rg" type="text" value={displayrg} readOnly/>
                         </div>
@@ -107,37 +108,42 @@ function PersonInform({ usuario = null }){
                 </fieldset>
                 <fieldset>
                     <legend>
-                        <h2>Afiliados</h2>
+                        <h3>Afiliados</h3>
                     </legend>
-                    <div>
-                    <label htmlFor="mae">Nome da mãe </label>
-                    <input id="mae" type="text" value={displaymae} readOnly/>
-                    </div>
+                    <div className='agrupamento-vertical'>
+                        <div className='wrapper-input'>
+                            <label htmlFor="mae">Nome da mãe: </label>
+                            <input id="mae" type="text" value={displaymae} readOnly/>
+                        </div>
 
-                    <div>
-                    <label htmlFor="pai">Nome do pai </label>
-                    <input id="pai" type="text" value={displaypai} readOnly/>
+                        <div className='wrapper-input'>
+                            <label htmlFor="pai">Nome do pai: </label>
+                            <input id="pai" type="text" value={displaypai} readOnly/>
+                        </div>
                     </div>
 
                 </fieldset>
 
                 <fieldset>
                      <legend>
-                        <h2>Contatos</h2>
+                        <h3>Contatos</h3>
                     </legend> 
-                    <div>
-                    <label htmlFor="email">E-mail:</label>
-                    <input id="email" type="email" value={displayemail} readOnly/>
+                    <div className='wrapper-input'>
+                        <label htmlFor="email">E-mail:</label>
+                        <input id="email" type="email" value={displayemail} readOnly/>
                     </div>
-                    <div>
-                        <label htmlFor="telefone-celular">Cel.:</label>
-                        <input id="telefone-celular" value={displaycel} type="text" readOnly/>
+                    <div className='agrupamento'>
+                        <div className='wrapper-input'>
+                            <label htmlFor="telefone-celular">Cel.:</label>
+                            <input className='alteravel' id="telefone-celular" value={displaycel} type="text" readOnly/>
+                        </div>
+
+                        <div className='wrapper-input'>
+                            <label htmlFor="telefone-fixo">Tel.:</label>
+                            <input className='alteravel' id="telefone-fixo" value={displaytel} type="text" readOnly/>
+                        </div>
                     </div>
-                    <div>
-                        <label htmlFor="telefone-fixo">Tel.:</label>
-                        <input id="telefone-fixo" value={displaytel} type="text" readOnly/>
-                    </div>
-                    <button type="button">
+                    <button className='salva' type="button">
                         Salvar
                     </button>
                 </fieldset>

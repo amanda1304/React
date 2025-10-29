@@ -1,6 +1,7 @@
+
 import Menu from "../Menu/Menu"
 import ValidExam from "./ValidExam"
-import HistoricoExam from "./HistoricoExam"
+
 function Exam (){
      return(
         <>
@@ -8,7 +9,7 @@ function Exam (){
 
             <h1>Exames e Laudos</h1>
             <ValidExam />
-            <HistoricoExam />
+
             <div className='div-menu'>
                     <Menu />
             </div>

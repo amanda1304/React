@@ -12,8 +12,8 @@ form{
     flex-direction: column;
    
 }
-fieldset{
-
+.acesso > fieldset{
+    border: none;
     
 }
 legend{
@@ -48,11 +48,12 @@ legend{
     padding: 0 10px; 
     margin-right: 2rem;
     height: 100%;
-
+    background-color: transparent;
 }
 input{
     height: 60%;
     max-width: 80%;
+    
 }
 
 #div-esqueci{
@@ -80,12 +81,11 @@ input{
     font-weight: 700;
     background-color: var(--third-color);
     border-radius: 14px;
+    border: none;
     box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.30);
 }
 /* Código de formatação da página de validação */
-.input-valid{
-   
-}
+
 .input-validcontainer{
 
     text-align: center;
@@ -99,6 +99,9 @@ input{
     border-radius: 8px;
     border: 2px solid var(--third-color);
     box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.30);
+}
+.go-back{
+    border: none;
 }
 @media screen and (min-width:809px){
     .input-wrapper-submit{

@@ -4,7 +4,10 @@
     max-width: 100%;
     background-color: var(--second-background-color);
 }
-
+h1{
+    font-size: 1.5rem;
+    color: var(--five-color-fonts);
+}
 .wrapper-menu{
     
     height: 85px;
