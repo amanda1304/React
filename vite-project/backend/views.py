@@ -170,8 +170,9 @@ class AgendaView(APIView):
         user = request.user
         from django.db import connection
         with connection.cursor() as cursor:
+            # REMOVIDO: 'observacoes' da query SELECT
             cursor.execute(
-                "SELECT id_agendamento, id_usuario, id_tipo_servico, data_hora, status, observacoes "
+                "SELECT id_agendamento, id_usuario, id_tipo, data_hora, status "
                 "FROM agendamentos WHERE id_usuario = %s ORDER BY data_hora DESC",
                 [user.pk]
             )
@@ -185,11 +186,13 @@ class AgendaView(APIView):
         """Cria um novo agendamento. Espera JSON com pelo menos: id_tipo, id_subservico (opcional), data e hora (ou data_hora ISO)."""
         user = request.user
         data = request.data
-        # aceitar tanto 'id_tipo_servico' quanto 'id_tipo' no payload
-        id_tipo = data.get('id_tipo_servico') or data.get('id_tipo')
+        id_tipo = data.get('id_tipo') or data.get('id_tipo')
         id_sub = data.get('id_subservico') or data.get('id_subtipo')
-        observacoes = data.get('observacoes', '')
-        status_ag = data.get('status', 'Pendente')
+        # REMOVIDO: Linha que buscava 'observacoes'
+        # observacoes = data.get('observacoes', '') 
+        
+        # O status padrão foi corrigido para 'Reservado' conforme discutido anteriormente
+        status_ag = data.get('status', 'Reservado')
 
         # construir data_hora
         data_hora = data.get('data_hora')
@@ -210,17 +213,9 @@ class AgendaView(APIView):
                 cursor.execute("SELECT column_name FROM information_schema.columns WHERE table_schema = DATABASE() AND table_name = %s", ['agendamentos'])
                 cols_tbl = [r[0] for r in cursor.fetchall()]
 
-                # escolhe o nome da coluna de tipo conforme o schema atual
-                if 'id_tipo_servico' in cols_tbl:
-                    tipo_col_name = 'id_tipo_servico'
-                elif 'id_tipo' in cols_tbl:
-                    tipo_col_name = 'id_tipo'
-                else:
-                    # fallback: usa id_tipo
-                    tipo_col_name = 'id_tipo'
-
-                fields = ['id_usuario', tipo_col_name, 'data_hora', 'status', 'observacoes']
-                values = [user.pk, id_tipo, data_hora, status_ag, observacoes]
+                # REMOVIDO: 'observacoes' da lista de campos e valores
+                fields = ['id_usuario', 'id_tipo', 'data_hora', 'status']
+                values = [user.pk, id_tipo, data_hora, status_ag]
 
                 # se existir coluna id_subservico e foi fornecido, insere-a antes de data_hora
                 if 'id_subservico' in cols_tbl and id_sub:
@@ -234,7 +229,7 @@ class AgendaView(APIView):
                     if 'id_subservico' in fields:
                         pos = fields.index('id_subservico') + 1
                     else:
-                        pos = fields.index(tipo_col_name) + 1
+                        pos = fields.index('id_tipo') + 1
                     fields.insert(pos, 'id_horario')
                     values.insert(pos, id_horario)
 
@@ -255,7 +250,7 @@ class AgendaView(APIView):
             return Response(ag, status=status.HTTP_201_CREATED)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    
+
 class TipoServicoView(APIView):
     """Retorna a lista de tipos de serviços disponíveis."""
     authentication_classes = [TokenAuthentication]

@@ -8,7 +8,7 @@ function SucessoAgendamento() {
   useEffect(() => {
     const timer = setTimeout(() => {
       navigate('/Agenda');
-    }, 60 * 1000); // 1 minuto
+    }, 60 * 60); // 1 minuto
 
     return () => clearTimeout(timer);
   }, [navigate]);

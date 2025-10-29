@@ -45,6 +45,7 @@ export default function Horarios() {
 
   async function handleAgendar() {
     if (!selected) return setError('Selecione um horário primeiro')
+    console.log('Horário selecionado:', selected)
     setError(null)
     setLoading(true)
     const token = localStorage.getItem('auth_token')
@@ -66,7 +67,7 @@ export default function Horarios() {
     const data_hora = buildDataHora(selected)
 
     const body = {
-      id_tipo_servico: tipo?.id_tipo_servico || tipo?.id_tipo || tipo?.id,
+      id_tipo: tipo?.id_tipo || tipo?.id_tipo || tipo?.id,
       id_subservico: sub?.id_subservico || sub?.id_subtipo || sub?.id,
       id_horario: selected.id_horario || selected.id || null,
       data_hora: data_hora,
@@ -125,7 +126,7 @@ export default function Horarios() {
               {horarios.map(h => {
                 const key = h.id_horario || h.id || `${h.data}-${h.hora}`
                 const label = `${h.data || h.date || h.dia} - ${h.hora || h.hora_inicio || h.time}`
-                const isSelected = selected && (selected.id_horario === h.id_horario || selected === h)
+                const isSelected = selected && (selected.id_horario === h.id_horario || selected === h || JSON.stringify(selected) === JSON.stringify(h))
                 return (
                   <li
                     key={key}

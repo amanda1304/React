@@ -3,20 +3,40 @@ import './consultation.css'
 
 export default function Consul() {
   const [agendamentos, setAgendamentos] = useState([])
+  const [subservico, setServico] = useState({})
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
   useEffect(() => {
     const token = localStorage.getItem('auth_token')
+    
     const fetchAgenda = async () => {
       setLoading(true)
       setError(null)
       try {
-        const res = await fetch('http://127.0.0.1:8001/api/agenda/', {
+        // Buscar serviços primeiro
+        const servicosRes = await fetch('http://127.0.0.1:8001/api/servicos/', { // Ajuste a URL conforme sua API
           headers: { Authorization: token ? `Token ${token}` : '' }
         })
-        if (!res.ok) throw new Error('Falha ao buscar agendamentos')
-        const data = await res.json()
+        
+        if (servicosRes.ok) {
+          const servicosData = await servicosRes.json()
+          const servicosMap = {}
+          // Ajuste 'nome' para o campo correto da sua API
+          servicosData.forEach(servico => {
+            servicosMap[servico.id] = servico.nome || servico.descricao || 'Serviço'
+          })
+          setServico(servicosMap)
+        }
+
+        // Buscar agendamentos
+        const agendaRes = await fetch('http://127.0.0.1:8001/api/agenda/', {
+          headers: { Authorization: token ? `Token ${token}` : '' }
+        })
+        
+        if (!agendaRes.ok) throw new Error('Falha ao buscar agendamentos')
+        const data = await agendaRes.json()
+        
         const list = Array.isArray(data) ? data : (Array.isArray(data?.agendamentos) ? data.agendamentos : [])
         list.sort((a, b) => {
           const da = new Date(a.data_hora || `${a.data} ${a.hora}`)
@@ -24,6 +44,7 @@ export default function Consul() {
           return da - db
         })
         setAgendamentos(list)
+        
       } catch (e) {
         console.error(e)
         setError(e.message || 'Erro')
@@ -33,6 +54,10 @@ export default function Consul() {
     }
     fetchAgenda()
   }, [])
+
+  const getNomeServico = (id_servico) => {
+    return subservico[id_servico] || 'Consulta'
+  }
 
   const fmt = dtStr => {
     if (!dtStr) return ''
@@ -51,7 +76,7 @@ export default function Consul() {
 
       {agendamentos.map(a => (
         <article key={a.id_agendamento || a.id} className='agendamento'>
-          <h3>{a.id_tipo_servico || a.tipo || 'Consulta'}</h3>
+          <h3>{getNomeServico(a.id_tipo_servico)}</h3>
           <p>{fmt(a.data_hora || `${a.data || ''} ${a.hora || ''}`)}</p>
           {a.status && <p>Status: {a.status}</p>}
           {a.observacoes && <p>Observações: {a.observacoes}</p>}
