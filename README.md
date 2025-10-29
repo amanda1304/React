@@ -30,7 +30,7 @@ Com ela, o usuário pode visualizar exames, consultas e laudos.
 | **Backend** | Python, Django |
 | **Banco de Dados** | MySQL |
 | **Design** | Figma ([ver projeto](https://www.figma.com/design/uRsJSzXE9DibUaC59vLjbu/Prontuario?node-id=0-1&t=KU8jdeIkiLbGcSro-1)) |
-
+| **Diagrama de ação | Miro ([ver diagrama](https://miro.com/app/board/uXjVJOkJysI=/))
 ---
 
 ## 🚀 Como Executar o Projeto
