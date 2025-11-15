@@ -1,3 +1,6 @@
+# Este projeto é um projeto integrador da univesp
+
+
 # 🏥 Plataforma do Usuário Unificado
 
 Um **aplicativo web** destinado a **pacientes** que unifica e apresenta o **histórico médico completo**, integrando dados da **rede pública e particular** de saúde em um só lugar.
