@@ -1,5 +1,5 @@
 # Este projeto é um projeto integrador da univesp
-<img src='https://github.com/amanda1304/React/blob/main/logo-univesp_simplificado_cor-negativo.svg'>
+<img src='https://github.com/amanda1304/React/blob/main/logo-univesp_simplificado_cor-negativo.svg' width='100'/>
 
 # 🏥 Plataforma do Usuário Unificado
 
